@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// ------------------------------------------------------------------------------------------------
+// <copyright file="TestMethodNameParser.cs" company="Microsoft">
+//     Copyright (c) Microsoft Corporation.  All rights reserved.
+// </copyright>
+// ------------------------------------------------------------------------------------------------
 
 namespace RealDocLib
 {
-    using System.IO;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
 
     public class TestMethodNameParser
@@ -38,7 +40,15 @@ namespace RealDocLib
                         testMethods.Add(classType.FullName, nameList);
                         foreach (var methodInfo in classType.GetMethods())
                         {
-                            nameList.Add(methodInfo.Name);                          
+                            var attributes = methodInfo.GetCustomAttributes();
+                            if (attributes != null)
+                            {
+                                var testMethodAttribute = attributes.FirstOrDefault(attribute => attribute.GetType().Name == "TestMethodAttribute");
+                                if (testMethodAttribute != null)
+                                {
+                                    nameList.Add(methodInfo.Name);
+                                }
+                            }
                         }
                     }
                 }
