@@ -12,12 +12,13 @@ namespace RealDocProgram
     {
         static void Main(string[] args)
         {
-            var parser = new TestMethodNameParser(args[0]);
-            var dictionary = parser.Parse();
-            foreach (var className in dictionary)
+            var docProvider = new MsTestDocumentProvider(args[0]);
+            var parser = new DocGenerator(docProvider);
+            var documents = parser.Generate();
+            foreach (var doc in documents)
             {
-                Console.WriteLine(className.Key);
-                foreach (var methodName in className.Value)
+                Console.WriteLine(doc.ClassName);
+                foreach (var methodName in doc.MethodNames)
                 {
                     Console.Write("\t");
                     Console.WriteLine(methodName);
